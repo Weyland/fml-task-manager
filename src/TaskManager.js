@@ -1,19 +1,35 @@
 'use strict';
 
 var DependencyManager = require('fml-dependency-manager').DependencyManager;
+
 var TaskNode = require('./TaskNode');
 
+/**
+ * TaskManager
+ */
 class TaskManager extends DependencyManager {
+
 	constructor() {
 		super();
 	}
 
-	createTask(name, dependencies, options) {
-		var task = new TaskNode(name, dependencies, options);
+	/**
+	 * Create a new task.
+	 * @param  {String}   name
+	 * @param  {Array}    dependencies
+	 * @param  {Function} _callback
+	 * @return {TaskNode}
+	 */
+	createTask(name, dependencies, _callback) {
+		var task = new TaskNode(name, dependencies, _callback);
 		return this.createNode(task);
 	}
 
-	// Starts a new asynchronous chain for a task list, and
+	/**
+	 * Start the task using it's name as identifier.
+	 * @param  {String}  taskName The name of the task you want to start
+	 * @return {Promise}
+	 */
 	startTask(taskName) {
 		var taskResultCache = {};
 		return this.getChain(taskName).reduce((chain, task) => chain.then((taskResult) => {
