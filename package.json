@@ -10,5 +10,8 @@
     "Weyland <weyland404@p0mp.com>",
     "wvbe <wybe@p0mp.com"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "fml-dependency-manager": "weyland/fml-dependency-manager"
+  }
 }
