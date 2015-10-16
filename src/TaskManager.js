@@ -15,13 +15,13 @@ class TaskManager extends DependencyManager {
 
 	/**
 	 * Create a new task.
-	 * @param  {String}   name
+	 * @param  {String}   taskName
 	 * @param  {Array}    dependencies
 	 * @param  {Function} _callback
 	 * @return {TaskNode}
 	 */
-	createTask(name, dependencies, _callback) {
-		var task = new TaskNode(name, dependencies, _callback);
+	createTask(taskName, dependencies, _callback) {
+		var task = new TaskNode(taskName, dependencies, _callback);
 		return this.createNode(task);
 	}
 
@@ -32,12 +32,13 @@ class TaskManager extends DependencyManager {
 	 */
 	startTask(taskName) {
 		var taskResultCache = {};
-		return this.getChain(taskName).reduce((chain, task) => chain.then((taskResult) => {
-			return task.start.apply(task, task.dependencies.map(depName => taskResultCache[depName]))
-				.then((taskResult) => {
-					taskResultCache[task.name] = taskResult;
-				});
-		}), Promise.resolve());
+		return this.getChain(taskName)
+			.reduce((chain, task) => chain.then(() => {
+				return task.start.apply(task, task.dependencies.map(depName => taskResultCache[depName]))
+					.then((taskResult) => {
+						taskResultCache[task.name] = taskResult;
+					});
+			}), Promise.resolve());
 	}
 }
 
